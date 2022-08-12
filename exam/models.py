@@ -30,7 +30,7 @@ class Exams(models.Model):
         return f"{self.exam_name} - {self.group}"
 
 class Marking(models.Model):
-    exam = models.ForeignKey(Exams, on_delete=models.SEt_NULL, null=True)
+    exam = models.ForeignKey(Exams, on_delete=models.SET_NULL, null=True)
     student = models.ForeignKey(Student, on_delete=models.CASCADE , null=True)
 
     def __str__(self):
