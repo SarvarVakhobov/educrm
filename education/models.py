@@ -19,7 +19,6 @@ class Timetable(models.Model):
     
 class Branch(models.Model):
     name = models.CharField(__("name of the branch"), max_length=255)
-    abbreviation = models.CharField(__("abbreviation"), max_length=20)
 
     def __str__(self):
         return self.name
@@ -98,14 +97,7 @@ class Lesson(models.Model):
         __('day of the week'), choices=DAYS)
 
     def __str__(self):
-        return f'{self.name}, {self.day}'
+        return f'{self.course}, {self.day}'
 
     class Meta:
         ordering = ['day', 'timetable']
-
-# class AppointTeacherToGroup(models.Model):
-#     group = models.ForeignKey(Group, on_delete=models.CASCADE, null=True)
-#     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True)
-
-#     def __str__(self):
-#         return self.group + self.teacher
