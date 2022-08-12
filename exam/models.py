@@ -1,11 +1,11 @@
 from django.db import models
-from education.models import Branch, Group, Room
+from education.models import Branch, Group, Room, Student
 
 # Create your models here.
 class Marking_system(models.Model):
     mark_name = models.CharField(max_length=10)
-    mark_from = models.IntegerField(default=100)
-    mark_upto = models.IntegerField(blank=True)
+    mark_from = models.IntegerField(blank=True, null=True)
+    mark_until = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         return self.mark_name
@@ -22,16 +22,16 @@ class Exams(models.Model):
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     exam_day = models.DateField(blank=True, null=True)
     time_from = models.TimeField(blank=True, null=True)
-    room_num = models.ForeignKey(Room, on_delete=models.CASCADE, null=True)
+    room_num = models.ForeignKey(Room, on_delete=models.SET_NULL, null=True)
     score_max = models.IntegerField(default=100)
     required_score = models.IntegerField(default=0)
     
     def __str__(self):
-        return self.exam_name + self.group
+        return f"{self.exam_name} - {self.group}"
 
 class Marking(models.Model):
-    exam = models.ForeignKey(Exams, on_delete=models.CASCADE, blank=True, null=True)
-    
+    exam = models.ForeignKey(Exams, on_delete=models.SEt_NULL, null=True)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE , null=True)
 
     def __str__(self):
-        return self.exam
+        return self.exam + self.student

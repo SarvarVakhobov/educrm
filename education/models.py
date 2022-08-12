@@ -31,7 +31,7 @@ class Course(models.Model):
 
 class LevelOfgroup(models.Model):
     name = models.CharField(max_length=80, blank=True, null=True)
-    branch = models.ForeignKey(to, on_delete=models.SET_NULL, null=True)
+    branch = models.ForeignKey(Branch, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.name
@@ -42,7 +42,7 @@ class Group(models.Model):
     branch = models.ForeignKey(Branch, on_delete=models.CASCADE, related_name='groups')
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     level = models.ForeignKey(LevelOfgroup, on_delete=models.SET_NULL, null=True)
-    teacher = models.ForeignKey(to, on_delete=models.SET_NULL, null=true)
+    teacher = models.ForeignKey(Teacher, on_delete=models.SET_NULL, null=True)
     date_activated = models.DateField(auto_now_add=True)
     date_joined = models.DateField(auto_now_add=True)
 
@@ -82,7 +82,7 @@ class Lesson(models.Model):
     room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='lessons')
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='lessons')
     timetable = models.ForeignKey(Timetable, on_delete=models.CASCADE)
-    lesson_type = models.ForeignKey(LessonType, on_delete=models.CASCADE, related_name='lessons', default=1)
+    # lesson_type = models.ForeignKey(LessonType, on_delete=models.CASCADE, related_name='lessons', default=1)
     even_week = models.BooleanField(__('even / odd week'), null=False)
     DAYS = (
         (1, __('Monday')),
