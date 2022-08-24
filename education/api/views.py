@@ -4,8 +4,36 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import CreateUserSerializer, LessonSerializer
-from timetable.models import Lesson
+from .serializers import *
+from education.models import *
+
+class RoomListView(APIView):
+    def get(self, request, format=None):
+        queryset = Room.objects.all()
+        serializer = RoomSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class CreateRoomView(APIView):
+    def post(self, request):
+        serializer = RoomSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=False):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UpdateRoomView(APIView):
+    def pacht(self, request, *args, **kwargs):
+        data = request.DATA
+        queryset = Room.objects.get(id=id)
+        serializer = RoomSerializer(queryset, data=data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LessonView(APIView):

@@ -2,7 +2,25 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
 from education.models import *
+from user.models import CustomUser
 
+
+class TimeTableSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Timetable
+        fields = "__all__"
+
+    def create(self, validated_data):
+        return Timetable.objects.create(**validated_data)
+
+class RoomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Room
+        fields = '__all__'
+
+class ChangeRoomSerializer():
+    pass
+        
 
 class LessonSerializer(serializers.ModelSerializer):
     course = serializers.SlugRelatedField(slug_field='name', read_only=True)
@@ -17,22 +35,25 @@ class LessonSerializer(serializers.ModelSerializer):
         model = Lesson
         exclude = ['id', 'even_week']
 
-class CreateLessonSerializer(serializers.ModelSerializer):
-    pass
+    def create(self, validated_data):
+        return Lesson(**validated_data)
 
-class TimeTableSerializer(serializers.ModelSerializer):
-    time_from = serializers.SlugRelatedField(read_only=True)
-    time_until = serializers.SlugRelatedField(read_only=True)
-
-    class Meta:
-        model = Timetable
-        exclude = ['id',]
+    def update(self, instance, validated_data):
+        instance.course = validated_data.get('course', instance.course)
+        instance.group = validated_data.get('group', instance.group)
+        instance.room = validated_data.get('room', instance.room)
+        instance.teacher = validated_data.get('teacher', instance.teacher)
+        instance.timetable = validated_data.get('timetable', instance.timetable)
+        instance.day = validated_data.get('day', instance.day)
+        instance.save()
+        return instance
+    
 
 
 class CreateUserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
             required=True,
-            validators=[UniqueValidator(queryset=User.objects.all())]
+            validators=[UniqueValidator(queryset=CustomUser.objects.all())]
             )
     password = serializers.CharField(min_length=8, write_only=True)
 
@@ -43,6 +64,6 @@ class CreateUserSerializer(serializers.ModelSerializer):
         return user
 
     class Meta:
-        model = User
+        model = CustomUser
         fields = ('email', 'password',)
         extra_kwargs = {'password': {'write_only': True}}
