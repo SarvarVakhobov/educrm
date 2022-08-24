@@ -61,7 +61,7 @@ class Room(models.Model):
     branch = models.ForeignKey(Branch, on_delete=models.CASCADE)
 
     def __str__(self):
-        return str(self.room_number)
+        return f"{str(self.room_number)} - {self.branch}"
 
 # class LessonName(models.Model):
 #     name = models.CharField(__("name of the lesson"), max_length=50)

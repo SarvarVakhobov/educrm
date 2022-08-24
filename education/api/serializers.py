@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from rest_framework.validators import UniqueValidator
+from rest_framework.validators import UniqueValidator, UniqueTogetherValidator
 
 from education.models import *
 from user.models import CustomUser
@@ -17,9 +17,12 @@ class RoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
         fields = '__all__'
-
-class ChangeRoomSerializer():
-    pass
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Room.objects.all(),
+                fields=['room_number', 'branch']
+            )
+        ]
         
 
 class LessonSerializer(serializers.ModelSerializer):

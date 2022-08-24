@@ -3,6 +3,7 @@ from .views import *
 
 urlpatterns = [
     path('rooms/', RoomListView.as_view(), name='rooms'),
-    path('update-room/<int:id>/', UpdateRoomView.as_view(), name='update_room'),
-    path('create-room/', CreateRoomView.as_view(), name='create_room'),
+    path('room-detail/<int:pk>/', RoomDetailView.as_view(), name='room_detail'),
+    path('create-timetable/', CreateTimeTableView.as_view(), name='create_timetable '),
+    path('lessons/', LessonView.as_view(), name='lessons'),
 ]

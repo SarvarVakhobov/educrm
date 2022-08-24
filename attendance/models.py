@@ -11,10 +11,11 @@ class AttendanceStudents(models.Model):
     holiday = models.BooleanField(default=False)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
+    status = models.CharField(max_length=30, choices=STATUS, default=STATUS[0][0])
     date = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return self.group + str(self.date)
+        return f"{str(self.student)} - {str(self.date)}"
 
 
     
